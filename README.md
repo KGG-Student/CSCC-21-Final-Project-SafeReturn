@@ -1,86 +1,109 @@
-# CSCC-21-Final-Project-SafeReturn
+# CSCC-21 Final Project — SafeReturn  
+A Lost and Found System for Xavier University
 
-**Members:
-**
-1. Arnel Enrico Paolo Codera
+## 👥 Members
+1. Arnel Enrico Paolo Codera  
+2. Jhemar G. Visande  
+3. Kyle Gabriel T. Galanida  
+4. Niall Nevin T. Cruz  
+5. Khrystian Dominic B. Awatin  
 
-2. Jhemar G. Visande
+---
 
-3. Kyle Gabriel T. Galanida
+## 📌 Current Progress
+- *Frontend:* In progress  
+- *Backend (Flask + MySQL):* In progress  
+  - Currently experimenting with *Google OAuth Authentication API*
 
-4. Niall Nevin T. Cruz
+---
 
-5. Khrystian Dominic B. Awatin
+## 📘 Background  
+SafeReturn is a *Lost and Found System* designed for school use.  
+It aims to streamline the reporting and recovery of lost items by replacing slow, traditional manual processes with a fast, organized, digitized platform.
 
-Current Progress:
+Users can easily report, track, and recover lost belongings through a structured and secure system.
 
-Frontend - in progress
+---
 
-Backend with Flask and Mysql - in progress *currenlty experimenting with google Oauthentication API*
--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Background
+## 📖 Project Description  
+SafeReturn provides a reliable platform for reporting, tracking, and managing lost and found items within the Xavier University community.
 
-This project is a lost and found system designed for the school. It aims to make the process of reporting and retrieving items more efficient, faster and organized. This project replaces traditional manual methods with a system that allows the users to report and keep track of their lost items. This allows users to easily report and track their belongings with ease.  
+### 🎯 Objectives
+- Build a Lost and Found system with *secure login*, *verification*, and *chat features*.
+- Promote honesty within the XU community.
+- Ensure an *unbiased*, transparent item recovery process.
+- Deliver an *efficient*, *reliable*, and *user-friendly* system.
 
-Project Description
+---
 
-Objectives
+## 📌 Project Scope  
 
-To create a Lost and Found system with secure login, verification, and chat features.
-To foster honesty in the XU community through the use of the Lost and Found system.
-To create an unbiased Lost and Found system.
-To create a reliable and efficient Lost and Found system.
-Scope
-The scope of this project includes the creation of a secure and functional Lost and Found System equipped with key features to streamline the process of reporting and recovering items such as:
-User Registration and Login:
- Secure authentication system that allows users to create accounts, log in, and manage their profiles to ensure accountability and privacy.
+### 🔐 User Registration & Login  
+- Secure authentication system (email + password, Google OAuth planned).  
+- Users can create accounts, log in, and manage personal profiles securely.
 
+### 📷 Item Reporting (Lost & Found)
+- Users can upload item images and descriptions.  
+- Items are published for visibility and tracking.
 
-Item Reporting (Lost & Found):
- Users can upload pictures, descriptions, and other details of lost or found items to the system for visibility and tracking.
+### ✔️ Verification System  
+- Confirms rightful ownership of items.  
+- Prevents false claims and ensures responsible return of belongings.
 
+### 💬 Chat System  
+- Real-time communication between users and Lost & Found staff.  
+- Coordinates item retrieval and verification.
 
-Verification System:
- A feature to confirm item ownership, reducing false claims and ensuring that items are returned to the rightful owner.
+### 🗃️ Activity Logging  
+- Records item reports, verifications, and user interactions.  
+- Ensures transparency and accountability.
 
+---
 
-Chat System:
- Users are able to chat with staff that are in charge with keeping the lost and coordinate with them the retrieval process of their item.
+## 🛠️ Methodology  
+The project follows the *Agile Methodology* — development is divided into weekly sprints, allowing flexibility, iterative improvement, and quick issue resolution.
 
+---
 
-Activity Logging:
-A record-keeping feature that maintains a log of all item reports, verifications, and user activities for reliability and transparency.
-Methodology
-The technical approach that will be used to develop this lost and found system is an Agile methodology. This methodology helps ensure that this project’s development process is flexible and effective. This approach divides the progress into small tasks with a specific focus each week. This process will help the project fix issues along the way and have a good-quality system.
+## 📚 Resources  
 
+### *Hardware*
+- Laptops/PCs for development and testing  
+- External hard drives / Cloud storage for backups  
 
-**Resources**
+### *Software*
+*Programming Language:*  
+- Python  
 
-Hardware
+*Frameworks & Libraries:*  
+- Flask / Django (Backend)
 
-Laptops/PCs – For development, testing, and project management.
+*Database:*  
+- MySQL  
 
+*Version Control:*  
+- Git + GitHub  
 
-External Hard Drives / Cloud Storage – For backups, project files, and data safety.
+*Project Management:*  
+- ClickUp  
 
-Software
-Programming Language: Python (main development language).
+*Communication Tools:*  
+- ClickUp, Discord, Messenger  
 
-Frameworks & Libraries: Django / Flask (backend).
+*Testing Tools:*  
+- PyTest / UnitTest  
+- Postman (API testing)  
 
-Database Systems: MySQL.
+*IDEs:*  
+- PyCharm  
+- Visual Studio Code  
 
-Version Control: Git with GitHub for source code management.
+*Deployment/Hosting:*  
+- Localhost  
+- Personal laptops  
 
-Project Management Tools: Clickup as recommended by our teacher.
-
-Communication Tools:Clickup,Discord and Messenger.
-
-Testing Tools: PyTest / UnitTest for Python testing, Postman for API testing.
-
-Integrated Development Environments (IDEs): PyCharm, VS Code.
-
-Deployment & Hosting: Localhost and personal laptops.
-
-Documentation Tools: Google Docs, Notion, or Confluence for writing documentation and guidelines.
+*Documentation Tools:*  
+- Google Docs  
+- Notion  
+- Confluence  
 
