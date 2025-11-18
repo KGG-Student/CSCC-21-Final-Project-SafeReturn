@@ -44,12 +44,12 @@ Verification System:
  A feature to confirm item ownership, reducing false claims and ensuring that items are returned to the rightful owner.
 
 
-SMS chat:
+Chat System:
  Users are able to chat with staff that are in charge with keeping the lost and coordinate with them the retrieval process of their item.
 
 
 Activity Logging:
- A record-keeping feature that maintains a log of all item reports, verifications, and user activities for reliability and transparency.
+A record-keeping feature that maintains a log of all item reports, verifications, and user activities for reliability and transparency.
 Methodology
 The technical approach that will be used to develop this lost and found system is an Agile methodology. This methodology helps ensure that this project’s development process is flexible and effective. This approach divides the progress into small tasks with a specific focus each week. This process will help the project fix issues along the way and have a good-quality system.
 
