@@ -1,7 +1,7 @@
 # CSCC-21-Final-Project-SafeReturn
 
-Members:
-
+**Members:
+**
 1. Arnel Enrico Paolo Codera
 
 2. Jhemar G. Visande
@@ -12,18 +12,18 @@ Members:
 
 5. Khrystian Dominic B. Awatin
 
-Current Progress:
-
+**Current Progress:
+**
 Frontend - in progress
 
 Backend with Flask and Mysql - in progress *currenlty experimenting with google Oauthentication API*
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Background
-
+**Background
+**
 This project is a lost and found system designed for the school. It aims to make the process of reporting and retrieving items more efficient, faster and organized. This project replaces traditional manual methods with a system that allows the users to report and keep track of their lost items. This allows users to easily report and track their belongings with ease.  
 
-Project Description
-
+**Project Description
+**
 Objectives
 
 To create a Lost and Found system with secure login, verification, and chat features.
@@ -54,7 +54,7 @@ Methodology
 The technical approach that will be used to develop this lost and found system is an Agile methodology. This methodology helps ensure that this project’s development process is flexible and effective. This approach divides the progress into small tasks with a specific focus each week. This process will help the project fix issues along the way and have a good-quality system.
 
 
-Resources
+**Resources**
 
 Hardware
 
