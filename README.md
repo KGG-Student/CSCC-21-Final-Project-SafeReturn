@@ -12,8 +12,8 @@
 
 5. Khrystian Dominic B. Awatin
 
-**Current Progress:
-**
+Current Progress:
+
 Frontend - in progress
 
 Backend with Flask and Mysql - in progress *currenlty experimenting with google Oauthentication API*
