@@ -14,4 +14,6 @@ Members:
 
 Current Progress:
 
-Working on Backend with Flask and Mysql 
+Frontend - in progress
+
+Backend with Flask and Mysql - in progress *currenlty experimenting with google Oauthentication API*
