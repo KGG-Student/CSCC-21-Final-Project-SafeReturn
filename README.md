@@ -18,12 +18,12 @@ Frontend - in progress
 
 Backend with Flask and Mysql - in progress *currenlty experimenting with google Oauthentication API*
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-**Background
-**
+Background
+
 This project is a lost and found system designed for the school. It aims to make the process of reporting and retrieving items more efficient, faster and organized. This project replaces traditional manual methods with a system that allows the users to report and keep track of their lost items. This allows users to easily report and track their belongings with ease.  
 
-**Project Description
-**
+Project Description
+
 Objectives
 
 To create a Lost and Found system with secure login, verification, and chat features.
