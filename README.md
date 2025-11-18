@@ -76,7 +76,7 @@ The project follows the *Agile Methodology* — development is divided into week
 - Python  
 
 *Frameworks & Libraries:*  
-- Flask / Django (Backend)
+- Flask
 
 *Database:*  
 - MySQL  
