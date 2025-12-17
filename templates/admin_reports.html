@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Admin – Reports</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
+</head>
+<body>
+
+<h1>Admin – Reports</h1>
+
+<h2>Lost Items</h2>
+<table border="1" cellpadding="8">
+  <tr>
+    <th>Item</th>
+    <th>Category</th>
+    <th>Location</th>
+    <th>Date Lost</th>
+    <th>Posted By</th>
+  </tr>
+
+  {% for item in lost_items %}
+  <tr>
+    <td>{{ item.item_name }}</td>
+    <td>{{ item.category }}</td>
+    <td>{{ item.location }}</td>
+    <td>{{ item.date_lost }}</td>
+    <td>{{ item.user_id }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+<hr>
+
+<h2>Found Items</h2>
+<table border="1" cellpadding="8">
+  <tr>
+    <th>Item</th>
+    <th>Category</th>
+    <th>Location</th>
+    <th>Date Found</th>
+    <th>Posted By</th>
+  </tr>
+
+  {% for item in found_items %}
+  <tr>
+    <td>{{ item.item_name }}</td>
+    <td>{{ item.category }}</td>
+    <td>{{ item.location }}</td>
+    <td>{{ item.date_found }}</td>
+    <td>{{ item.user_id }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+<br>
+<a href="{{ url_for('admin_dashboard') }}">⬅ Back to Admin Dashboard</a>
+
+</body>
+</html>

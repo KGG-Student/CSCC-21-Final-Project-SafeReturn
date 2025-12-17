@@ -1,0 +1,209 @@
+/* ===== Layout / Page ===== */
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #ffffff 0%, #e4f0ff 40%, #c8ddff 100%);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    margin: 0;
+    padding: 40px 15px;
+}
+
+/* Wrap everything so it's nicely centered */
+.register-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+}
+
+/* ===== Title ===== */
+
+.register-title {
+    font-size: 32px;
+    color: #0056c9;
+    font-weight: 700;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.lost-icon {
+    width: 60px;
+    height: 60px;
+}
+
+/* ===== Card / Box ===== */
+
+.blue-box {
+    background-color: #004aad;
+    border-radius: 22px;
+    padding: 30px 32px 28px;
+    width: 100%;
+    max-width: 420px;
+    box-sizing: border-box;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+}
+
+/* ===== Form fields ===== */
+
+.input-group {
+    margin-bottom: 18px;
+}
+
+label {
+    display: block;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 6px;
+    font-size: 15px;
+}
+
+/* Inputs */
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 11px 12px;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    box-sizing: border-box;
+    font-size: 15px;
+    background-color: #ffffff;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+}
+
+/* Placeholder style (optional) */
+input::placeholder {
+    color: #9aa4b5;
+}
+
+/* Focus state */
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+    outline: none;
+    border-color: #ffdd69;
+    box-shadow: 0 0 0 3px rgba(255, 221, 105, 0.6);
+    transform: translateY(-1px);
+}
+
+/* ===== Buttons row ===== */
+
+.register_buttons {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 22px;
+}
+
+/* Base button style for both Cancel & Register */
+.reg_btn {
+    flex: 1;
+    background-color: #ffffff;
+    color: #004aad;
+    font-weight: 700;
+    font-size: 16px;
+    border: 2px solid #ffffff;
+    border-radius: 999px;             
+    padding: 10px 0;
+    cursor: pointer;
+    text-align: center;
+
+    text-decoration: none !important;
+    display: inline-block;
+
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.reg_btn:hover {
+    background-color: #003a8b;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 7px 16px rgba(0, 0, 0, 0.3);
+}
+
+.reg_btn:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+a.reg_btn {
+    text-decoration: none !important;
+}
+
+
+@media (max-width: 480px) {
+    .blue-box {
+        padding: 24px 20px 22px;
+        border-radius: 18px;
+    }
+
+    .register-title {
+        font-size: 26px;
+    }
+
+    .register_buttons {
+        flex-direction: column;
+    }
+
+    .reg_btn {
+        width: 100%;
+    }
+}
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.modal-overlay.show {
+    display: flex;
+}
+
+.modal-box {
+    background: white;
+    padding: 25px 30px;
+    border-radius: 12px;
+    max-width: 320px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.modal-box h2 {
+    margin: 0 0 10px;
+    color: #d32f2f;
+}
+
+.modal-box p {
+    margin-bottom: 20px;
+}
+
+.modal-btn {
+    background: #004aad;
+    color: white;
+    border: none;
+    padding: 8px 25px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.modal-btn:hover {
+    background: #003a8b;
+}

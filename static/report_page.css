@@ -1,0 +1,132 @@
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #ffffff 0%, #e4f0ff 40%, #c8ddff 100%);
+    margin: 0;
+    padding: 0;
+
+    display: flex;
+    justify-content: center;     
+    align-items: center;         
+    min-height: 100vh;
+}
+
+
+.report-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+    text-align: center;
+}
+
+
+.report-title {
+    font-size: 38px;
+    font-weight: 700;
+    color: #004aad;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.report-title .lost-icon {
+    width: 60px;
+    height: 60px;
+}
+
+
+.blue-box {
+    background-color: #004aad;
+    padding: 50px 70px;
+    border-radius: 22px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+}
+
+
+.RepItm_btn, .ViewItm_btn {
+    background-color: #ffffff;
+    color: #004aad;
+    border-radius: 12px;
+    border: none;
+
+    padding: 14px 40px;
+    width: 240px;
+
+    font-size: 18px;
+    font-weight: bold;
+
+    cursor: pointer;
+    text-decoration: none;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.25);
+
+    transition:
+        background-color 0.25s ease,
+        color 0.25s ease,
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.RepItm_btn:hover, .ViewItm_btn:hover {
+    background-color: #003a8b;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
+}
+
+
+.circle-report-buttons {
+    position: fixed;
+    right: 30px;
+    bottom: 30px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    z-index: 1000;
+}
+
+.crl_btn {
+    background-color: #004aad;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.25);
+    transition: 0.25s ease;
+}
+
+.crl_btn:hover {
+    background-color: #003a8b;
+    transform: translateY(-2px);
+}
+
+.circle-report-buttons img {
+    width: 30px;
+    height: 30px;
+}
+
+a {
+    text-decoration: none;
+}

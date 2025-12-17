@@ -1,0 +1,214 @@
+/* ===== Overall Layout ===== */
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #ffffff 0%, #e4f0ff 40%, #c8ddff 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 40px 15px;
+}
+
+/* ===== Container ===== */
+
+.login-container {
+    width: 100%;
+    max-width: 380px;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 16px;
+    text-align: center;
+}
+
+/* ===== Page Title ===== */
+
+.login-title {
+    font-size: 36px;
+    color: #0056c9;
+    font-weight: 700;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.lost-icon {
+    width: 55px;
+    height: 55px;
+}
+
+/* ===== Blue Box (form wrapper) ===== */
+
+.textbox {
+    background-color: #004aad;
+    border-radius: 18px;
+    padding: 28px 24px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+}
+
+/* ===== Input Group ===== */
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 18px;
+    width: 100%;
+}
+
+.input-group label {
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+/* ===== Input Fields ===== */
+
+.input-group input[type="text"],
+.input-group input[type="password"] {
+    width: 100%;
+    padding: 11px 12px;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    box-sizing: border-box;
+    font-size: 15px;
+    background-color: #ffffff;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.1s;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #ffdd69;
+    box-shadow: 0 0 0 3px rgba(255, 221, 105, 0.6);
+    transform: translateY(-1px);
+}
+
+/* ===== Login Button Group ===== */
+
+.login_buttons {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 22px;
+}
+
+/* ===== Buttons ===== */
+
+.log_btn {
+    flex: 1;
+    background-color: #ffffff;
+    color: #004aad;
+    font-weight: 700;
+    font-size: 15px;
+    border: 2px solid #004aad;
+    border-radius: 999px;   /* pill style */
+    
+    padding: 12px 0;
+    cursor: pointer;
+    text-decoration: none !important;
+
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+
+    transition: 
+        background-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.log_btn:hover {
+    background-color: #003a8b;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 7px 16px rgba(0, 0, 0, 0.3);
+}
+
+.log_btn:active {
+    transform: scale(0.97);
+}
+
+/* Make <a class="log_btn"> work with no underline */
+a.log_btn {
+    text-decoration: none !important;
+}
+
+/* ===== Responsive ===== */
+
+@media (max-width: 480px) {
+    .textbox {
+        padding: 24px 18px;
+    }
+
+    .login-title {
+        font-size: 30px;
+    }
+
+    .login_buttons {
+        flex-direction: column;
+    }
+
+    .log_btn {
+        width: 100%;
+    }
+}
+
+
+.modal-overlay {
+    position: fixed;
+    inset: 0; 
+    background: rgba(0, 0, 0, 0.6); 
+    display: none;                   
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-overlay.show {
+    display: flex;                   
+}
+
+.modal-box {
+    background: #ffffff;
+    padding: 25px 30px;
+    border-radius: 12px;
+    max-width: 320px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.modal-box h2 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 20px;
+    color: #d32f2f;
+}
+
+.modal-box p {
+    margin: 0 0 20px;
+    font-size: 15px;
+    color: #333;
+}
+
+.modal-btn {
+    background-color: #004aad;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 15px;
+    border: none;
+    border-radius: 999px;
+    padding: 8px 24px;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+    transition: 0.2s ease;
+}
+
+.modal-btn:hover {
+    background-color: #003a8b;
+    transform: translateY(-1px);
+}

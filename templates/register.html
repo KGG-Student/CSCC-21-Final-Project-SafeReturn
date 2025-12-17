@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Registration Page</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='register.css') }}"
+    />
+  </head>
+  <body>
+    <div class="register-container">
+      <div class="register-title">
+        <img
+          src="{{ url_for('static', filename='images/lost_icon.png') }}"
+          alt="Logo"
+          class="lost-icon"
+        />
+        Registration Page
+      </div>
+
+      <div class="blue-box">
+        <form method="post" action="{{ url_for('register') }}">
+          <div class="input-group">
+            <label for="id-number">ID Number:</label>
+            <input type="text" id="id-number" name="id_number" required />
+          </div>
+
+          <div class="input-group">
+            <label for="user-name">Name:</label>
+            <input type="text" id="user-name" name="username" required />
+          </div>
+
+          <div class="input-group">
+            <label for="user-email">Email:</label>
+            <input type="email" id="user-email" name="email" required />
+          </div>
+
+          <div class="input-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required />
+          </div>
+
+          <div class="input-group">
+            <label for="confirm-password">Confirm Password:</label>
+            <input
+              type="password"
+              id="confirm-password"
+              name="confirm_password"
+              required
+            />
+          </div>
+
+          <div class="register_buttons">
+            <a href="{{ url_for('login') }}" class="reg_btn">Cancel</a>
+
+            <button type="submit" class="reg_btn">Register</button>
+          </div>
+
+          <div
+            id="errorModal"
+            class="modal-overlay{% if error_message %} show{% endif %}"
+          >
+            <div class="modal-box">
+              <h2>Registration Error</h2>
+              <p>{{ error_message }}</p>
+              <button id="modalOkBtn" class="modal-btn">OK</button>
+            </div>
+          </div>
+
+          <div
+            id="successModal"
+            class="modal-overlay{% if success_message %} show{% endif %}"
+          >
+            <div class="modal-box">
+              <h2>Success!</h2>
+              <p>{{ success_message }}</p>
+              <button id="successOkBtn" class="modal-btn">OK</button>
+            </div>
+          </div>
+
+          <script>
+            document.addEventListener("DOMContentLoaded", () => {
+              const errorModal = document.getElementById("errorModal");
+              const errorBtn = document.getElementById("modalOkBtn");
+
+              if (errorModal && errorBtn) {
+                errorBtn.onclick = () => errorModal.classList.remove("show");
+              }
+
+              const successModal = document.getElementById("successModal");
+              const successBtn = document.getElementById("successOkBtn");
+
+              if (successModal && successBtn) {
+                successBtn.onclick = () => {
+                  successModal.classList.remove("show");
+                  window.location.href = "{{ url_for('login') }}";
+                };
+              }
+            });
+          </script>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

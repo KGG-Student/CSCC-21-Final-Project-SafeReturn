@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Report Page</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='report_page.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='chat.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='notification.css') }}">
+
+    <style>
+        .lost-icon {
+            width: 30px;
+            height: 30px;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- ===== PAGE WRAPPER ===== -->
+<div class="report-container">
+
+    <!-- ===== TITLE ===== -->
+    <div class="report-title">
+        <img src="{{ url_for('static', filename='images/lost_icon.png') }}" class="lost-icon">
+        Report Item
+    </div>
+
+    <!-- ===== CENTER BLUE BOX ===== -->
+    <div class="blue-box">
+        <a href="{{ url_for('lost_item') }}" class="RepItm_btn">
+            Report Lost Item
+        </a>
+
+        <a href="{{ url_for('found_item') }}" class="ViewItm_btn">
+            Report Found Items
+        </a>
+    </div>
+
+</div>
+
+<!-- ===== FLOATING BUTTONS (SAME AS HOMEPAGE) ===== -->
+<div class="circle-report-buttons">
+
+    <!-- Notification -->
+    <button type="button" class="crl_btn" id="notificationToggleButton">
+        <img src="{{ url_for('static', filename='images/bell.png') }}" class="lost-icon">
+        <span id="notifBadge" class="notif-badge" style="display:none">0</span>
+    </button>
+
+    <!-- Back -->
+    <a href="{{ url_for('homepage') }}" class="crl_btn">
+        <img src="{{ url_for('static', filename='images/Back.jpg') }}" class="lost-icon">
+    </a>
+
+</div>
+
+<!-- ===== NOTIFICATION WINDOW ===== -->
+<div class="notification-window" id="notificationWindow">
+    <div class="notification-header">
+        Notifications
+        <button class="close-notif" id="closeNotifButton">&times;</button>
+    </div>
+    <div class="notification-body" id="notificationBody">
+        <div class="notif-message">No new notifications</div>
+    </div>
+</div>
+
+<!-- ===== CHAT WINDOW (SINGLE SOURCE) ===== -->
+{% include "components/chat_window.html" %}
+
+<!-- ===== JS ===== -->
+<script src="{{ url_for('static', filename='chat.js') }}"></script>
+<script src="{{ url_for('static', filename='notification.js') }}"></script>
+
+</body>
+</html>

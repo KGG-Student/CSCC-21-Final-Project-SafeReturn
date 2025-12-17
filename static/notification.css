@@ -1,0 +1,132 @@
+
+
+.notification-header {
+    background-color: #004aad;
+    color: white;
+    padding: 10px 15px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.close-notif {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.notification-body {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+/* each notification row */
+.notif-message {
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    background-color: #f4f7ff;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    font-size: 14px;
+}
+
+.notif-message:hover {
+    background-color: #e2ebff;
+    transform: translateY(-1px);
+}
+
+.notif-title {
+    font-weight: 700;
+    color: #004aad;
+    margin-bottom: 4px;
+}
+
+.notif-text {
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.notif-time {
+    font-size: 11px;
+    color: #777;
+}
+.notif-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: red;
+  color: white;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 50%;
+  font-weight: bold;
+}
+
+
+.notification-window.open {
+    display: flex;
+    opacity: 1;
+    transform: translateY(0);
+}
+.notification-window {
+  position: fixed;
+  right: 30px;
+  bottom: 120px;
+  width: 320px;
+  height: 400px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+  display: none;
+  flex-direction: column;
+
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.25s ease;
+
+  z-index: 9999;
+}
+
+.notification-window.show {
+  display: flex;
+  opacity: 1;
+  transform: translateY(0);
+}
+.notif-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: red;
+  color: white;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 50%;
+  font-weight: bold;
+}
+.notif-message.unread {
+  border-left: 4px solid #ff3b3b;
+  background-color: #eef3ff;
+}
+
+.notif-delete {
+  position: absolute;
+  right: 10px;
+  top: 8px;
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.notif-delete:hover {
+  color: red;
+}
+

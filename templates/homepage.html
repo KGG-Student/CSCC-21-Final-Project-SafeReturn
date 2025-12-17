@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Home Page</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='homepage.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='chat.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='notification.css') }}"
+    />
+  </head>
+
+  <body>
+    <div class="homepage-container">
+      <div class="homepage-title">
+        <img
+          src="{{ url_for('static', filename='images/lost_icon.png') }}"
+          alt="Lost Icon"
+          class="lost-icon"
+        />
+        Home Page
+      </div>
+
+      <div class="blue-box">
+        <a href="{{ url_for('report_page') }}" class="hm_btn">Report Item</a>
+        <a href="{{ url_for('items') }}" class="hm_btn">View Items</a>
+      </div>
+
+      <div class="circle-homepage-buttons">
+        <button type="button" class="crl_btn" id="notificationToggleButton">
+  <img src="{{ url_for('static', filename='images/bell.png') }}" class="lost-icon">
+  <span id="notifBadge" class="notif-badge" style="display:none">!</span>
+</button>
+
+
+<div class="notification-window" id="notificationWindow">
+  <div class="notification-header">
+    Notifications
+    <button class="close-notif" id="closeNotifButton">&times;</button>
+  </div>
+  <div class="notification-body" id="notificationBody"></div>
+</div>
+
+        </button>
+
+        <button id="homeBackButton" class="crl_btn">
+  <img src="{{ url_for('static', filename='images/Back.jpg') }}" class="lost-icon">
+</button>
+
+      </div>
+    </div>
+
+    <div class="chat-window" id="chatWindow">
+      <div class="chat-header">
+        <div class="user-info">
+          <span class="user-status online"></span>
+          Chat Support
+        </div>
+        <button class="close-chat" id="closeChatButton">&times;</button>
+      </div>
+
+      <div class="chat-body" id="chatBody"></div>
+
+      <div class="chat-footer">
+        <input type="text" id="chatInput" placeholder="Type a message..." />
+        <button id="chatSendButton">Send</button>
+      </div>
+    </div>
+
+    <div class="notification-window" id="notificationWindow">
+      <div class="notification-header">
+        Notifications
+        <button class="close-notif" id="closeNotifButton">&times;</button>
+      </div>
+
+      <div class="notification-body" id="notificationBody">
+        <div class="notif-message">No new notifications</div>
+      </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='chat.js') }}"></script>
+    <script src="{{ url_for('static', filename='notification.js') }}"></script>
+    <script src="{{ url_for('static', filename='homepage.js') }}"></script>
+
+    {% include "components/chat_window.html" %}
+
+<div id="logoutModal" class="delete-modal-overlay">
+  <div class="delete-modal">
+    <h2>Confirm Logout</h2>
+    <p>Are you sure you want to logout?</p>
+    <div class="delete-modal-buttons">
+      <button id="cancelLogout" class="modal-btn cancel-btn">Cancel</button>
+      <button id="confirmLogout" class="modal-btn confirm-btn">Logout</button>
+    </div>
+  </div>
+</div>
+
+  </body>
+</html>

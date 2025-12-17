@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Item Description</title>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='item_description.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='chat.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='notification.css') }}">
+</head>
+
+<body data-item-type="{{ item_type }}" data-item-id="{{ item._id }}">
+
+<div class="container">
+
+  <div class="header">
+    <h1>
+      <img src="{{ url_for('static', filename='images/lost_icon.png') }}" class="lost-icon">
+      Item Description
+    </h1>
+  </div>
+
+  <div class="blue-box">
+
+    <div class="left-box">
+      <div class="img-placeholder">
+        {% if item.image_path %}
+          <img src="{{ url_for('static', filename=item.image_path) }}" alt="Item image">
+        {% else %}
+          <span>No image</span>
+        {% endif %}
+      </div>
+
+      <div class="display-box">Item Name: {{ item.item_name }}</div>
+      <div class="display-box">Location: {{ item.location }}</div>
+    </div>
+
+    <div class="right-box">
+      <div class="desc-box">Description: {{ item.description }}</div>
+      <div class="display-box">Category: {{ item.category }}</div>
+
+      <div class="display-box">
+        {% if item_type == 'lost' %}
+          Date Lost: {{ item.date_lost }}
+        {% else %}
+          Date Found: {{ item.date_found }}
+        {% endif %}
+      </div>
+
+      <div class="display-box">
+        Uploader ID:
+        {{ item.uploader_id_number or "Unknown" }}
+      </div>
+
+      {% if session.get("user_id") != item.user_id %}
+      <div class="chat-sender-box">
+        <button type="button" id="chatSenderButton" class="chat-sender-btn">
+          Chat with sender
+        </button>
+      </div>
+      {% endif %}
+
+      {% if session.get("user_id") == item.user_id %}
+<div class="edit-delete-panel horizontal">
+
+  {% if item.status != "claimed" %}
+    <button type="button" id="openClaimModal" class="btn-claim">
+      ✓ Claim
+    </button>
+
+    <a href="{{ url_for('edit_item',
+                        item_type=item_type,
+                        item_id=item._id|string) }}"
+       class="btn-edit">
+      Edit
+    </a>
+
+    <form id="delete-form"
+          method="post"
+          action="{{ url_for('delete_item',
+                             item_type=item_type,
+                             item_id=item._id|string) }}">
+      <button type="button" id="delete-button" class="btn-delete">
+        Delete
+      </button>
+    </form>
+
+  {% else %}
+    <div class="claimed-badge">
+      ✓ Item Claimed
+    </div>
+
+    <button class="btn-edit disabled" disabled>
+      Edit
+    </button>
+
+    <button class="btn-delete disabled" disabled>
+      Delete
+    </button>
+  {% endif %}
+
+</div>
+{% endif %}
+
+
+    </div>
+  </div>
+</div>
+
+<div id="claimModal" class="delete-modal-overlay">
+  <div class="delete-modal">
+    <h2>Confirm Claim</h2>
+    <p>
+      Are you sure you want to mark this item as <strong>CLAIMED</strong>?<br><br>
+      This will remove it from active listings.
+    </p>
+
+    <div class="delete-modal-buttons">
+      <button type="button" id="claimCancel" class="modal-btn cancel-btn">
+        Cancel
+      </button>
+
+      <form method="post"
+            action="{{ url_for('claim_item',
+                               item_type=item_type,
+                               item_id=item._id|string) }}">
+        <button type="submit" class="modal-btn confirm-btn">
+          Yes, Claim Item
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div id="deleteModal" class="delete-modal-overlay">
+  <div class="delete-modal">
+    <h2>Delete Item</h2>
+    <p>Are you sure? This action cannot be undone.</p>
+
+    <div class="delete-modal-buttons">
+      <button type="button" id="deleteCancel" class="modal-btn cancel-btn">
+        Cancel
+      </button>
+      <button type="button" id="deleteConfirm" class="modal-btn confirm-btn">
+        Delete
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="circle-buttons">
+
+  <button type="button" class="crl_btn" id="notificationToggleButton">
+    <img src="{{ url_for('static', filename='images/bell.png') }}" class="lost-icon">
+    <span id="notifBadge" class="notif-badge" style="display:none">0</span>
+  </button>
+
+  <button type="button" class="crl_btn" id="chatToggleButton">
+    <img src="{{ url_for('static', filename='images/chat.jpg') }}" class="chat-icon">
+  </button>
+
+  {% if request.args.get('from') == 'admin' %}
+    <a href="{{ url_for('admin_dashboard') }}" class="crl_btn">
+      <img src="{{ url_for('static', filename='images/Back.jpg') }}" class="lost-icon">
+    </a>
+  {% else %}
+    <a href="{{ url_for('homepage') }}" class="crl_btn">
+      <img src="{{ url_for('static', filename='images/Back.jpg') }}" class="lost-icon">
+    </a>
+  {% endif %}
+
+</div>
+
+{% include "components/chat_window.html" %}
+
+<div class="notification-window" id="notificationWindow">
+  <div class="notification-header">
+    Notifications
+    <button class="close-notif" id="closeNotifButton">&times;</button>
+  </div>
+  <div class="notification-body" id="notificationBody">
+    <div class="notif-message">No new notifications</div>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='chat.js') }}"></script>
+<script src="{{ url_for('static', filename='notification.js') }}"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const deleteBtn = document.getElementById("delete-button");
+  const deleteForm = document.getElementById("delete-form");
+  const deleteModal = document.getElementById("deleteModal");
+  const deleteCancel = document.getElementById("deleteCancel");
+  const deleteConfirm = document.getElementById("deleteConfirm");
+
+  if (deleteBtn) {
+    deleteBtn.onclick = () => deleteModal.classList.add("show");
+    deleteCancel.onclick = () => deleteModal.classList.remove("show");
+    deleteConfirm.onclick = () => deleteForm.submit();
+  }
+
+  const claimBtn = document.getElementById("openClaimModal");
+  const claimModal = document.getElementById("claimModal");
+  const claimCancel = document.getElementById("claimCancel");
+
+  if (claimBtn) {
+    claimBtn.onclick = () => claimModal.classList.add("show");
+    claimCancel.onclick = () => claimModal.classList.remove("show");
+  }
+
+  const chatSenderBtn = document.getElementById("chatSenderButton");
+  const chatToggleBtn = document.getElementById("chatToggleButton");
+  const chatWindow = document.getElementById("chatWindow");
+
+  if (chatSenderBtn && chatToggleBtn && chatWindow) {
+    chatSenderBtn.onclick = () => {
+      if (chatWindow.style.display !== "block") {
+        chatToggleBtn.click();
+      }
+    };
+  }
+
+});
+</script>
+
+</body>
+</html>

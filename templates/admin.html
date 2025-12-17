@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='notification.css') }}">
+  
+</head>
+<body>
+<header class="admin-header">
+  <h1>Admin</h1>
+</header>
+
+<div class="admin-wrapper">
+
+  <aside class="sidebar">
+    <button class="nav-btn active" data-tab="reportsTab">Reports</button>
+    <button class="nav-btn" data-tab="itemsTab">Items</button>
+    <button class="nav-btn" data-tab="logsTab">Logs</button>
+    <button class="nav-btn" data-tab="chatTab">Chat</button>
+  </aside>
+
+  <main class="content">
+
+    <section id="reportsTab" class="tab-content active">
+      <h2>Reports</h2>
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Item</th>
+            <th>Location</th>
+            <th>Date</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="reportsTableBody">
+          <tr><td colspan="5">Loading...</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="itemsTab" class="tab-content">
+      <h2>Items</h2>
+      <div id="itemsBox">Loading archived items...</div>
+    </section>
+
+<section id="logsTab" class="tab-content">
+  <h2>System Logs</h2>
+
+  <div class="logs-controls">
+    <select id="filterActor">
+      <option value="">All Actors</option>
+      <option value="admin">Admin</option>
+      <option value="user">User</option>
+    </select>
+
+    <select id="filterAction">
+      <option value="">All Actions</option>
+      <option value="CREATE_REPORT">Create</option>
+      <option value="EDIT_REPORT">Edit</option>
+      <option value="CLAIM">Claim</option>
+      <option value="USER_CLAIM_REPORT">User Claim</option>
+      <option value="DELETE">Delete</option>
+      <option value="PERMANENT_DELETE">Permanent Delete</option>
+      <option value="REOPEN">Reopen</option>
+    </select>
+  </div>
+
+  <div id="logsBox" class="logs-box">
+    Loading...
+  </div>
+
+  <div class="pagination">
+    <button id="prevPage">Prev</button>
+    <span id="pageInfo"></span>
+    <button id="nextPage">Next</button>
+  </div>
+</section>
+
+    <section id="chatTab" class="tab-content">
+  <h2>Admin Chat</h2>
+
+  <div class="admin-chat-layout">
+    <div id="chatList" class="chat-list">
+      Loading conversations...
+    </div>
+
+    <div class="chat-window">
+      <div class="chat-header" id="chatHeader">
+        Select a conversation
+      </div>
+
+      <div class="chat-body" id="chatBody"></div>
+
+      <div class="chat-footer">
+        <input type="text" id="adminChatInput" placeholder="Type a message..." />
+        <button id="adminChatSend">Send</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+  </main>
+</div>
+
+<div id="claimModal" class="delete-modal-overlay">
+  <div class="delete-modal">
+    <h2>Mark as Claimed</h2>
+    <p>Mark this report as <strong>CLAIMED</strong>?</p>
+    <div class="delete-modal-buttons">
+      <button id="cancelClaim" class="modal-btn cancel-btn">Cancel</button>
+      <button id="confirmClaim" class="modal-btn confirm-btn">Claim</button>
+    </div>
+  </div>
+</div>
+
+<div id="confirmModal" class="delete-modal-overlay">
+  <div class="delete-modal">
+    <h2 id="confirmTitle">Delete</h2>
+    <p id="confirmText">Are you sure?</p>
+    <div class="delete-modal-buttons">
+      <button id="cancelDelete" class="modal-btn cancel-btn">Cancel</button>
+      <button id="confirmDelete" class="modal-btn confirm-btn">Delete</button>
+    </div>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='admin.js') }}"></script>
+<button id="backButton" class="floating-back-btn">
+<img src="{{ url_for('static', filename='images/Back.jpg') }}" class="back-icon">
+</button>
+<div id="logoutModal" class="delete-modal-overlay">
+  <div class="delete-modal">
+    <h2>Confirm Logout</h2>
+    <p>Are you sure you want to logout?</p>
+    <div class="delete-modal-buttons">
+      <button id="cancelLogout" class="modal-btn cancel-btn">Cancel</button>
+      <button id="confirmLogout" class="modal-btn confirm-btn">Logout</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

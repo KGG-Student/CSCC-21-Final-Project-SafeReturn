@@ -1,0 +1,592 @@
+/* =======================
+   GLOBAL
+======================= */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f6f8;
+}
+
+/* =======================
+   HEADER
+======================= */
+.admin-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding: 20px;
+  background: #ffffff;
+}
+
+.admin-header h1 {
+  color: #004aad;
+  margin: 0;
+}
+
+/* Notification bell */
+.notif-btn {
+  position: absolute;
+  right: 30px;
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: #004aad;
+}
+
+.notif-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: red;
+  color: white;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 50%;
+  font-weight: bold;
+}
+
+/* =======================
+   LAYOUT
+======================= */
+.admin-wrapper {
+  width: 90%;
+  margin: 20px auto;
+  background: #004aad;
+  border-radius: 25px;
+  padding: 30px;
+  display: flex;
+  gap: 30px;
+  min-height: 600px;
+}
+
+/* =======================
+   SIDEBAR
+======================= */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.nav-btn {
+  width: 140px;
+  padding: 12px;
+  border-radius: 20px;
+  border: 2px solid white;
+  background: transparent;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-btn.active,
+.nav-btn:hover {
+  background: white;
+  color: #004aad;
+}
+
+/* =======================
+   CONTENT
+======================= */
+.content {
+  background: #eef2f7;
+  border-radius: 20px;
+  padding: 25px;
+  flex: 1;
+}
+
+/* Tabs */
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* =======================
+   TABLE
+======================= */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 12px;
+  border-bottom: 1px solid #ccc;
+  vertical-align: middle;
+}
+
+.admin-table th {
+  background: #004aad;
+  color: white;
+}
+
+/* Action cell */
+.admin-table td:last-child {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+/* =======================
+   BUTTON SYSTEM (SINGLE SOURCE)
+======================= */
+.view-btn,
+.claim-btn,
+.delete-btn,
+.modal-btn {
+  min-width: 96px;
+  height: 38px;
+  padding: 0 18px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+
+  transition: background-color 0.2s ease,
+              transform 0.15s ease,
+              box-shadow 0.15s ease;
+}
+
+.view-btn:hover,
+.claim-btn:hover,
+.delete-btn:hover,
+.modal-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* Colors */
+.view-btn {
+  background-color: #004aad;
+  color: #ffffff;
+}
+
+.claim-btn {
+  background-color: #28a745;
+  color: #ffffff;
+}
+
+.delete-btn,
+.modal-btn.confirm {
+  background-color: #ff4d4d;
+  color: #ffffff;
+}
+
+.delete-btn:hover,
+.modal-btn.confirm:hover {
+  background-color: #d93636;
+}
+
+.modal-btn.cancel {
+  background-color: #e0e0e0;
+  color: #333333;
+}
+
+.modal-btn.cancel:hover {
+  background-color: #cfcfcf;
+}
+
+/* =======================
+   LOGS
+======================= */
+.logs-box {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* =======================
+   MODALS
+======================= */
+.delete-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 9999;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.delete-modal-overlay.show {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.delete-modal {
+  background: white;
+  width: 380px;
+  padding: 25px;
+  border-radius: 18px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+}
+/* ===============================
+   ADMIN MODAL BUTTON REVAMP
+================================ */
+
+/* Modal action row */
+.delete-modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 22px;
+}
+
+/* Modal buttons inherit admin button system */
+.delete-modal-buttons .modal-btn {
+  min-width: 110px;
+  height: 38px;
+  padding: 0 20px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+
+  transition: background-color 0.2s ease,
+              transform 0.15s ease,
+              box-shadow 0.15s ease;
+}
+
+/* Hover animation */
+.delete-modal-buttons .modal-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* Cancel (matches neutral admin style) */
+.delete-modal-buttons .modal-btn.cancel-btn {
+  background-color: #e0e0e0;
+  color: #333333;
+}
+
+.delete-modal-buttons .modal-btn.cancel-btn:hover {
+  background-color: #cfcfcf;
+}
+
+/* Delete / Confirm (matches delete-btn) */
+.delete-modal-buttons .modal-btn.confirm-btn {
+  background-color: #ff4d4d;
+  color: #ffffff;
+}
+
+.delete-modal-buttons .modal-btn.confirm-btn:hover {
+  background-color: #d93636;
+}
+/* ===============================
+   ARCHIVED ITEMS (ADMIN)
+================================ */
+
+#itemsBox {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.archive-row {
+  background: white;
+  border-radius: 14px;
+  padding: 14px 18px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.archive-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.archive-info strong {
+  font-size: 15px;
+  color: #004aad;
+}
+
+.archive-meta {
+  font-size: 13px;
+  color: #666;
+}
+
+.archive-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Status badges */
+.archive-status {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.archive-status.claimed {
+  background: #e6ffed;
+  color: #1e7e34;
+}
+
+.archive-status.deleted {
+  background: #ffecec;
+  color: #d93636;
+}
+/* Archive action buttons */
+.reopen-btn {
+  background: #ffc107;
+  color: #333;
+}
+
+.reopen-btn:hover {
+  background: #e0a800;
+}
+
+.perma-delete-btn {
+  background: #dc3545;
+  color: #fff;
+}
+
+.perma-delete-btn:hover {
+  background: #b52a37;
+}
+/* ===============================
+   ARCHIVE ACTION BUTTON FIX
+   (Match View Button Style)
+================================ */
+
+/* Ensure archive actions align nicely */
+.archive-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Normalize ALL archive buttons */
+.archive-actions .view-btn,
+.archive-actions .reopen-btn,
+.archive-actions .perma-delete-btn {
+  min-width: 110px;
+  height: 40px;
+  padding: 0 22px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+
+  transition: background-color 0.2s ease,
+              transform 0.15s ease,
+              box-shadow 0.15s ease;
+}
+
+.archive-actions .view-btn:hover,
+.archive-actions .reopen-btn:hover,
+.archive-actions .perma-delete-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+
+.archive-actions .view-btn {
+  background-color: #004aad;
+  color: #ffffff;
+}
+
+.archive-actions .reopen-btn {
+  background-color: #ffc107;
+  color: #333333;
+}
+
+.archive-actions .reopen-btn:hover {
+  background-color: #e0a800;
+}
+
+.archive-actions .perma-delete-btn {
+  background-color: #ff4d4d;
+  color: #ffffff;
+}
+
+.archive-actions .perma-delete-btn:hover {
+  background-color: #d93636;
+}
+
+
+.logs-box {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.log-row {
+  background: white;
+  padding: 14px 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.log-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.log-action {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: bold;
+  background: #e0e0e0;
+}
+
+.log-actor {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.log-actor.admin {
+  background: #004aad;
+  color: white;
+}
+
+.log-actor.user {
+  background: #6c757d;
+  color: white;
+}
+
+.log-time {
+  font-size: 12px;
+  color: #777;
+}
+
+.log-description {
+  font-size: 14px;
+  color: #333;
+}
+.logs-controls {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.logs-controls select {
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.pagination button {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  background: #004aad;
+  color: white;
+  font-weight: bold;
+}
+
+.log-action.CREATE_REPORT { background: #e3f2fd; color: #0d47a1; }
+.log-action.EDIT_REPORT { background: #fff3cd; color: #856404; }
+.log-action.CLAIM,
+.log-action.USER_CLAIM_REPORT { background: #e6ffed; color: #1e7e34; }
+
+.log-action.DELETE,
+.log-action.USER_DELETE_REPORT { background: #ffecec; color: #d93636; }
+
+.log-action.PERMANENT_DELETE { background: #f8d7da; color: #721c24; }
+.log-action.REOPEN { background: #ede7f6; color: #4527a0; }
+
+
+.floating-back-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+
+  width: 56px;
+  height: 56px;
+
+  border-radius: 50%;
+  border: none;
+
+  background: #004aad;
+  color: white;
+  font-size: 22px;
+  font-weight: bold;
+
+  cursor: pointer;
+  z-index: 999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+
+.back-icon {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  pointer-events: none;
+}
+

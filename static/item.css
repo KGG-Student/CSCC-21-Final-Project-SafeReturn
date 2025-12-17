@@ -1,0 +1,238 @@
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f6f8;
+}
+
+
+.circle-buttons {
+  position: fixed;
+  right: 30px;
+  bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.crl_btn {
+  background-color: #004aad;
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.25s ease;
+}
+
+.crl_btn:hover {
+  background-color: #003a8b;
+}
+
+
+.view-items-title {
+  font-size: 42px;
+  color: #004aad;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  margin: 25px 0 15px;
+}
+
+.lost-icon {
+  width: 55px;
+  height: 55px;
+}
+
+
+.blue-container {
+  width: 78%;
+  margin: 0 auto;
+  background: #004aad;
+  padding: 30px;
+  border-radius: 28px;
+  height: 75vh;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.search-container {
+  display: flex;
+  background: white;
+  border-radius: 30px;
+  padding: 6px 10px;
+  max-width: 480px;
+  margin: 0 auto 25px;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  padding: 10px 14px;
+}
+
+.search-button {
+  border: none;
+  background: transparent;
+  font-size: 22px;
+  cursor: pointer;
+  color: #2c7bf0;
+}
+
+.search-button:hover {
+  color: #004aad;
+}
+
+
+.items-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr; 
+  gap: 24px;
+  flex: 1;
+  min-height: 0;
+}
+
+
+
+.lost-items,
+.found-items,
+.claimed-items {
+  background: white;
+  border-radius: 22px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+
+.list-title {
+  font-size: 22px;
+  font-weight: bold;
+  text-align: center;
+  margin: 0 0 12px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #e0e0e0;
+  color: #004aad;
+}
+
+.claimed-items .list-title {
+  color: #004aad;               
+  border-bottom: 2px solid #e0e0e0;
+}
+
+
+.item-button-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.item-button-wrapper::-webkit-scrollbar {
+  width: 8px;
+}
+.item-button-wrapper::-webkit-scrollbar-thumb {
+  background: #b0b0b0;
+  border-radius: 10px;
+}
+.item-button-wrapper::-webkit-scrollbar-track {
+  background: #e6e6e6;
+  border-radius: 10px;
+}
+
+
+.item-button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: #004aad;
+  color: white;
+  border-radius: 14px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.item-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+  background: #0056b3;
+}
+
+
+.item-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+
+.item-button.claimed {
+  background: #004aad;      
+  color: white;
+  opacity: 0.6;             
+  border: none;
+  position: relative;
+}
+
+
+.lost-items p,
+.found-items p,
+.claimed-items p {
+  text-align: center;
+  margin-top: 30px;
+  color: #555;
+  font-size: 15px;
+}
+
+
+@media (max-width: 1100px) {
+  .items-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .claimed-items {
+    margin-top: 20px;
+  }
+
+  .blue-container {
+    width: 90%;
+    height: auto;
+  }
+}
+.item-button.claimed::after {
+  content: "CLAIMED";
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-size: 10px;
+  font-weight: bold;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 3px 6px;
+  border-radius: 6px;
+}
+
+.circle-buttons .crl_btn img {
+  width: 28px;  
+  height: 28px;
+  object-fit: contain;
+}
+
+
+.circle-buttons .lost-icon {
+  width: 28px !important;
+  height: 28px !important;
+}

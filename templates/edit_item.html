@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Edit Item</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='lost_found_item.css') }}">
+</head>
+<body>
+
+<div class="form-container">
+
+    <div class="report-title">
+        <img src="{{ url_for('static', filename='images/lost_icon.png') }}" class="lost-icon" alt="Lost Icon">
+        {% if item_type == 'lost' %}
+            Edit Lost Item
+        {% else %}
+            Edit Found Item
+        {% endif %}
+    </div>
+
+    <div class="blue-box">
+        <form method="post" action="{{ url_for('edit_item', item_type=item_type, item_id=item._id|string) }}">
+
+            <div class="top-row">
+                <div class="field-row">
+                    <label for="item-name" class="label">Item Name:</label>
+                    <input
+                        type="text"
+                        id="item-name"
+                        name="item_name"
+                        class="input-text"
+                        value="{{ item.item_name }}"
+                        required>
+                </div>
+            </div>
+
+            <div class="description_box">
+                <div class="field-row">
+                    <label for="description" class="label">Description:</label>
+                    <textarea
+                        id="description"
+                        name="description"
+                        class="input-textarea"
+                        required>{{ item.description }}</textarea>
+                </div>
+            </div>
+
+            <div class="location-row">
+                <label for="location" class="label">Location:</label>
+                <input
+                    type="text"
+                    id="location"
+                    name="location"
+                    class="input-text"
+                    value="{{ item.location }}"
+                    required>
+            </div>
+
+            <div class="date-field">
+                <label for="date" class="label">
+                    {% if item_type == 'lost' %}
+                        Date Lost:
+                    {% else %}
+                        Date Found:
+                    {% endif %}
+                </label>
+
+                {% if item_type == 'lost' %}
+                    <input
+                        type="date"
+                        id="date"
+                        name="date_lost"
+                        class="input-date"
+                        value="{{ item.date_lost }}"
+                        required>
+                {% else %}
+                    <input
+                        type="date"
+                        id="date"
+                        name="date_found"
+                        class="input-date"
+                        value="{{ item.date_found }}"
+                        required>
+                {% endif %}
+            </div>
+
+            <div class="category-field">
+                <label for="category" class="label">Category:</label>
+                <div class="category-select-wrapper">
+                    <select id="category" name="category" class="input-category" required>
+                        <option value="" disabled>Select Category</option>
+                        <option value="electronics" {% if item.category == 'electronics' %}selected{% endif %}>
+                            Electronics
+                        </option>
+                        <option value="clothing" {% if item.category == 'clothing' %}selected{% endif %}>
+                            Clothing &amp; Accessories
+                        </option>
+                        <option value="documents" {% if item.category == 'documents' %}selected{% endif %}>
+                            Documents &amp; IDs
+                        </option>
+                        <option value="others" {% if item.category == 'others' %}selected{% endif %}>
+                            Other Items
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="submit-row" style="gap: 15px;">
+                <a
+                    href="{{ url_for('item_description', item_type=item_type, item_id=item._id|string) }}"
+                    class="submit-button"
+                    style="background-color: #ffffff; color:#004ebf; border-color:#004ebf; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; padding:10px 30px;">
+                    Cancel
+                </a>
+
+                <button type="submit" class="submit-button">
+                    Save Changes
+                </button>
+            </div>
+            {% include "components/chat_window.html" %}
+
+
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,299 @@
+
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #ffffff;
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 40px auto;
+}
+
+
+
+.header h1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+
+  font-size: 40px;
+  color: #0056c9;
+  margin-bottom: 25px;
+}
+
+.lost-icon {
+  width: 60px;
+  height: 60px;
+}
+
+
+
+.blue-box {
+  background-color: #004ebf;
+  border-radius: 22px;
+  padding: 30px 40px;
+  display: flex;
+  gap: 30px;
+  color: #ffffff;
+}
+
+
+
+.left-box,
+.right-box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+
+
+.img-placeholder {
+  width: 100%;
+  height: 260px;
+  background-color: #ffffff;
+  border-radius: 15px;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.img-placeholder img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+
+
+.display-box,
+.desc-box {
+  background-color: #ffffff;
+  color: #555;
+  border-radius: 15px;
+  padding: 12px 18px;
+  font-size: 16px;
+}
+
+.desc-box {
+  min-height: 120px;
+}
+
+
+
+.chat-sender-box {
+  margin-top: 12px;
+}
+
+.chat-sender-btn {
+  background-color: #00a2ff;
+  color: #ffffff;
+  padding: 10px 22px;
+  border-radius: 18px;
+  border: none;
+
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.chat-sender-btn:hover {
+  background-color: #007acc;
+  transform: translateY(-1px);
+}
+
+
+.edit-delete-panel.horizontal {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.edit-delete-panel.horizontal button,
+.edit-delete-panel.horizontal a {
+  height: 44px;
+  min-width: 120px;
+  padding: 0 24px;
+  box-sizing: border-box;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 15px;
+  font-weight: bold;
+  line-height: 1;
+
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-claim {
+  background-color: #28a745;
+  color: #ffffff;
+}
+
+.btn-claim:hover {
+  background-color: #218838;
+}
+
+.btn-edit {
+  background-color: #ffffff;
+  color: #004aad;
+  border: 2px solid #004aad;
+}
+
+.btn-edit:hover {
+  background-color: #004aad;
+  color: #ffffff;
+}
+
+.btn-delete {
+  background-color: #ff4d4d;
+  color: #ffffff;
+}
+
+.btn-delete:hover {
+  background-color: #d93636;
+}
+
+.edit-delete-panel .disabled {
+  background-color: #bfc6cc !important;
+  color: #6c757d !important;
+  border: none !important;
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.65;
+}
+
+.claimed-badge {
+  background-color: #e6ffed;
+  color: #1e7e34;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-weight: bold;
+}
+
+
+
+.circle-buttons {
+  position: fixed;
+  right: 30px;
+  bottom: 30px;
+  display: flex;
+  gap: 20px;
+  z-index: 1000;
+}
+
+.crl_btn {
+  background-color: #004aad;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  cursor: pointer;
+  transition: 0.25s ease;
+  text-decoration: none;
+}
+
+.crl_btn:hover {
+  background-color: #003a8b;
+  transform: translateY(-1px);
+}
+
+.circle-buttons img {
+  width: 30px;
+  height: 30px;
+}
+
+
+
+.delete-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 2000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.delete-modal-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.delete-modal {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 24px 28px;
+  width: 340px;
+  max-width: 90%;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  text-align: center;
+}
+
+.delete-modal-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.modal-btn {
+  flex: 1;
+  padding: 10px 0;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.cancel-btn {
+  background-color: #ffffff;
+  color: #004ebf;
+  border-color: #004ebf;
+}
+
+.cancel-btn:hover {
+  background-color: #004ebf;
+  color: #ffffff;
+}
+
+.confirm-btn {
+  background-color: #ff4d4d;
+  color: #ffffff;
+}
+
+.confirm-btn:hover {
+  background-color: #d93636;
+}

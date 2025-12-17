@@ -1,0 +1,38 @@
+<!-- templates/components/chat_window.html -->
+
+<div class="chat-window" id="chatWindow" style="display:none;">
+  <div class="chat-header">
+    <div class="user-info">
+      <span class="user-status online"></span>
+      Chat
+    </div>
+    <button class="close-chat" id="closeChatButton">&times;</button>
+  </div>
+
+  <!-- where messages are rendered by chat.js -->
+  <div class="chat-body" id="chatBody"></div>
+
+  <!-- footer with image + text + send -->
+  <div class="chat-footer">
+    <!-- hidden file input -->
+    <input type="file" id="chatImageInput" accept="image/*" style="display:none;">
+
+    <!-- image button -->
+    <button type="button" id="chatImageButton" class="chat-image-button">
+      📷
+    </button>
+
+    <!-- text input -->
+    <input
+      type="text"
+      id="chatInput"
+      class="chat-input"
+      placeholder="Type a message..."
+    >
+
+    <!-- send button -->
+    <button type="button" id="chatSendButton" class="chat-send-button">
+      Send
+    </button>
+  </div>
+</div>
