@@ -45,3 +45,5 @@ venv\Scripts\activate
 3️⃣ Install Dependencies
 pip install -r requirements.txt
 
+TO run just do 
+py.app.py
