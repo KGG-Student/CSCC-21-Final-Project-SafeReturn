@@ -107,3 +107,8 @@ The project follows the *Agile Methodology* — development is divided into week
 - Notion  
 - Confluence  
 
+🔁 How Your Teammate / Professor Runs It
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+python app.py
