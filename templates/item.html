@@ -2,174 +2,197 @@
 <html>
   <head>
     <title>Items</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='item.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='chat.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='notification.css') }}"
-    />
+    <link rel="stylesheet" href="{{ url_for('static', filename='item.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='chat.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='notification.css') }}">
   </head>
 
   <body>
     <div class="view-items-title">
-      <img
-        src="{{ url_for('static', filename='images/lost_icon.png') }}"
-        alt="Lost Icon"
-        class="lost-icon"
-      />
-      <span>View Item</span>
+      <img src="{{ url_for('static', filename='images/lost_icon.png') }}" class="lost-icon">
+      <span>View Items</span>
     </div>
 
     <div class="blue-container">
-      <!-- SEARCH BAR -->
-      <div class="search-container">
-        <input type="text" class="search-input" placeholder="Search item" />
-        <button class="search-button">🔍</button>
+
+      <!-- SEARCH + FILTER BAR -->
+      <div class="search-container" style="gap:10px;flex-wrap:wrap;">
+        <input
+          type="text"
+          id="itemSearch"
+          class="search-input"
+          placeholder="Search by item or location"
+        >
+
+        <select id="typeFilter" class="search-input" style="max-width:160px;">
+          <option value="">All Types</option>
+          <option value="lost">Lost</option>
+          <option value="found">Found</option>
+          <option value="claimed">Claimed</option>
+        </select>
+
+        <select id="categoryFilter" class="search-input" style="max-width:200px;">
+          <option value="">All Categories</option>
+          <option value="electronics">Electronics</option>
+          <option value="clothing">Clothing</option>
+          <option value="documents">Documents</option>
+          <option value="others">Others</option>
+        </select>
       </div>
 
       <div class="items-wrapper">
+
         <!-- LOST ITEMS -->
         <div class="lost-items">
           <h3 class="list-title">Lost Items</h3>
           <div class="item-button-wrapper">
-            {% if lost_items %} {% for item in lost_items %}
+            {% if lost_items %}
+            {% for item in lost_items %}
             <a
               href="{{ url_for('item_description', item_type='lost', item_id=item._id|string) }}"
               class="item-button"
+              data-name="{{ item.item_name|lower }}"
+              data-location="{{ item.location|lower }}"
+              data-category="{{ item.category }}"
+              data-type="lost"
             >
-              <img
-                src="{% if item.image_path %}{{ url_for('static', filename=item.image_path) }}{% else %}{{ url_for('static', filename='images/item.png') }}{% endif %}"
-                alt="Icon for {{ item.item_name }}"
-                class="item-icon"
-              />
+              <img src="{{ url_for('static', filename=item.image_path if item.image_path else 'images/item.png') }}"
+                   class="item-icon">
               <span class="item-text">{{ item.item_name }}</span>
             </a>
-            {% endfor %} {% else %}
-            <p>No lost items reported yet.</p>
+            {% endfor %}
+            {% else %}
+              <p>No lost items reported yet.</p>
             {% endif %}
           </div>
         </div>
 
+        <!-- FOUND ITEMS -->
         <div class="found-items">
           <h3 class="list-title">Found Items</h3>
           <div class="item-button-wrapper">
-            {% if found_items %} {% for item in found_items %}
+            {% if found_items %}
+            {% for item in found_items %}
             <a
               href="{{ url_for('item_description', item_type='found', item_id=item._id|string) }}"
               class="item-button"
+              data-name="{{ item.item_name|lower }}"
+              data-location="{{ item.location|lower }}"
+              data-category="{{ item.category }}"
+              data-type="found"
             >
-              <img
-                src="{% if item.image_path %}{{ url_for('static', filename=item.image_path) }}{% else %}{{ url_for('static', filename='images/item.png') }}{% endif %}"
-                alt="Icon for {{ item.item_name }}"
-                class="item-icon"
-              />
+              <img src="{{ url_for('static', filename=item.image_path if item.image_path else 'images/item.png') }}"
+                   class="item-icon">
               <span class="item-text">{{ item.item_name }}</span>
             </a>
-            {% endfor %} {% else %}
-            <p>No found items reported yet.</p>
+            {% endfor %}
+            {% else %}
+              <p>No found items reported yet.</p>
             {% endif %}
           </div>
         </div>
-<div class="claimed-items">
-  <h3 class="list-title">Claimed Items</h3>
 
-  <div class="item-button-wrapper">
+        <!-- CLAIMED ITEMS -->
+        <div class="claimed-items">
+          <h3 class="list-title">Claimed Items</h3>
+          <div class="item-button-wrapper">
 
-    {% if claimed_lost or claimed_found %}
+            {% if claimed_lost or claimed_found %}
 
-      {% for item in claimed_lost %}
-      <a href="{{ url_for('item_description', item_type='lost', item_id=item._id|string) }}"
-         class="item-button claimed">
-        <img src="{% if item.image_path %}
-                  {{ url_for('static', filename=item.image_path) }}
-                  {% else %}
-                  {{ url_for('static', filename='images/item.png') }}
-                  {% endif %}"
-             class="item-icon">
-        <span class="item-text">{{ item.item_name }} (Lost)</span>
-      </a>
-      {% endfor %}
+              {% for item in claimed_lost %}
+              <a
+                href="{{ url_for('item_description', item_type='lost', item_id=item._id|string) }}"
+                class="item-button claimed"
+                data-name="{{ item.item_name|lower }}"
+                data-location="{{ item.location|lower }}"
+                data-category="{{ item.category }}"
+                data-type="claimed"
+              >
+                <img src="{{ url_for('static', filename=item.image_path if item.image_path else 'images/item.png') }}"
+                     class="item-icon">
+                <span class="item-text">{{ item.item_name }} (Lost)</span>
+              </a>
+              {% endfor %}
 
-      {% for item in claimed_found %}
-      <a href="{{ url_for('item_description', item_type='found', item_id=item._id|string) }}"
-         class="item-button claimed">
-        <img src="{% if item.image_path %}
-                  {{ url_for('static', filename=item.image_path) }}
-                  {% else %}
-                  {{ url_for('static', filename='images/item.png') }}
-                  {% endif %}"
-             class="item-icon">
-        <span class="item-text">{{ item.item_name }} (Found)</span>
-      </a>
-      {% endfor %}
+              {% for item in claimed_found %}
+              <a
+                href="{{ url_for('item_description', item_type='found', item_id=item._id|string) }}"
+                class="item-button claimed"
+                data-name="{{ item.item_name|lower }}"
+                data-location="{{ item.location|lower }}"
+                data-category="{{ item.category }}"
+                data-type="claimed"
+              >
+                <img src="{{ url_for('static', filename=item.image_path if item.image_path else 'images/item.png') }}"
+                     class="item-icon">
+                <span class="item-text">{{ item.item_name }} (Found)</span>
+              </a>
+              {% endfor %}
 
-    {% else %}
-      <p>No claimed items yet.</p>
-    {% endif %}
+            {% else %}
+              <p>No claimed items yet.</p>
+            {% endif %}
 
-  </div>
-</div>
+          </div>
+        </div>
 
       </div>
     </div>
 
+    <!-- FLOATING BUTTONS -->
     <div class="circle-buttons">
-      <button type="button" class="crl_btn" id="notificationToggleButton">
-  <img src="{{ url_for('static', filename='images/bell.png') }}" class="lost-icon">
-  <span id="notifBadge" class="notif-badge" style="display:none">0</span>
-</button>
-
-<div class="notification-window" id="notificationWindow">
-  <div class="notification-header">
-    Notifications
-    <button class="close-notif" id="closeNotifButton">&times;</button>
-  </div>
-  <div class="notification-body" id="notificationBody"></div>
-</div>
-
+      <button class="crl_btn" id="notificationToggleButton">
+        <img src="{{ url_for('static', filename='images/bell.png') }}" class="lost-icon">
+        <span id="notifBadge" class="notif-badge" style="display:none">0</span>
+      </button>
 
       <a href="{{ url_for('homepage') }}" class="crl_btn">
-        <img
-          src="{{ url_for('static', filename='images/Back.jpg') }}"
-          alt="Back Icon"
-          class="lost-icon"
-        />
+        <img src="{{ url_for('static', filename='images/Back.jpg') }}" class="lost-icon">
       </a>
-    </div>
-
-    <div class="chat-window" id="chatWindow">
-      <div class="chat-header">
-        <div class="user-info">
-          <span class="user-status online"></span>
-          Chat Support
-        </div>
-        <button class="close-chat" id="closeChatButton">&times;</button>
-      </div>
-      <div class="chat-body" id="chatBody"></div>
-      <div class="chat-footer">
-        <input type="text" id="chatInput" placeholder="Type a message..." />
-        <button id="chatSendButton">Send</button>
-      </div>
-    </div>
-
-    <div class="notification-window" id="notificationWindow">
-      <div class="notification-header">
-        Notifications
-        <button class="close-notif" id="closeNotifButton">&times;</button>
-      </div>
-      <div class="notification-body" id="notificationBody">
-        <div class="notif-message">No new notifications</div>
-      </div>
     </div>
 
     <script src="{{ url_for('static', filename='chat.js') }}"></script>
     <script src="{{ url_for('static', filename='notification.js') }}"></script>
+
+    <!-- SEARCH + FILTER JS -->
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const search = document.getElementById("itemSearch");
+      const type = document.getElementById("typeFilter");
+      const category = document.getElementById("categoryFilter");
+      const items = document.querySelectorAll(".item-button");
+
+      function applyFilters() {
+        const s = search.value.toLowerCase();
+        const t = type.value;
+        const c = category.value;
+
+        items.forEach(item => {
+          let show = true;
+
+          if (s &&
+              !item.dataset.name.includes(s) &&
+              !item.dataset.location.includes(s)) {
+            show = false;
+          }
+
+          if (t && item.dataset.type !== t) {
+            show = false;
+          }
+
+          if (c && item.dataset.category !== c) {
+            show = false;
+          }
+
+          item.style.display = show ? "flex" : "none";
+        });
+      }
+
+      search.addEventListener("input", applyFilters);
+      type.addEventListener("change", applyFilters);
+      category.addEventListener("change", applyFilters);
+    });
+    </script>
 
     {% include "components/chat_window.html" %}
   </body>

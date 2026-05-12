@@ -1,4 +1,6 @@
+from email.mime import image
 from unittest import result
+import uuid
 from flask import Flask, render_template, request, redirect, url_for, session, flash,jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
@@ -8,6 +10,13 @@ from bson.objectid import ObjectId
 import certifi
 from datetime import datetime
 from bson import ObjectId
+from flask import request, render_template
+from werkzeug.security import generate_password_hash
+from uuid import uuid4
+from datetime import datetime, timedelta
+import smtplib
+from email.message import EmailMessage
+from werkzeug.utils import secure_filename
 
 
 ATLAS_URI = "mongodb+srv://flaskUser:Flask12345@cluster0.uxyqdpe.mongodb.net/?appName=Cluster0"
@@ -22,6 +31,8 @@ found_items_col = mongo_db["found_items"]
 chat_col        = mongo_db["item_chat_messages"]
 notif_col       = mongo_db["notifications"]
 claimed_items_col = mongo_db["claimed_items"]
+
+
 
 
 def is_admin():
@@ -53,9 +64,17 @@ def log_action(action, description, item_id=None, item_type=None, actor="admin")
 app = Flask(__name__)
 app.secret_key = "CHANGE_THIS_SECRET_KEY"
 
-UPLOAD_FOLDER = os.path.join("static", "uploads")
+EMAIL_ADDRESS = "skyb18627@gmail.com"
+EMAIL_PASSWORD = "lgghmexr cnuljloh"
+BASE_URL = "http://127.0.0.1:5000"
+
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+
+UPLOAD_FOLDER = os.path.join(BASE_DIR, "static", "uploads")
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+
 
 @app.route("/", methods=["GET", "POST"])
 @app.route("/login", methods=["GET", "POST"])
@@ -65,6 +84,12 @@ def login():
     if request.method == "POST":
         id_number = request.form.get("id_number")
         password = request.form.get("password")
+
+        if not id_number.isdigit():
+            return render_template(
+                "login.html",
+                error_message="ID number must contain digits only."
+            )
 
         user = users_col.find_one({"id_number": id_number})
 
@@ -83,46 +108,166 @@ def login():
     return render_template("login.html", error_message=error_message)
 
 
+
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     error_message = None
     success_message = None
 
     if request.method == "POST":
-        id_number = request.form.get("id_number")
-        name = request.form.get("username")
-        email = request.form.get("email")
-        password = request.form.get("password")
-        confirm_password = request.form.get("confirm_password")
+        id_number = request.form.get("id_number", "").strip()
+        name = request.form.get("username", "").strip()
+        email = request.form.get("email", "").strip()
+        password = request.form.get("password", "")
+        confirm_password = request.form.get("confirm_password", "")
 
-        # check duplicates
+        if not id_number.isdigit():
+            error_message = "ID Number must contain digits only."
+            return render_template("register.html", error_message=error_message)
+
+        if len(id_number) != 11:
+             error_message = "ID Number must be exactly 12 digits."
+             return render_template("register.html", error_message=error_message)
+
         if users_col.find_one({"id_number": id_number}):
-            error_message = "ID Number already registered"
+            error_message = "ID Number already registered."
             return render_template("register.html", error_message=error_message)
 
         if users_col.find_one({"email": email}):
-            error_message = "Email already registered"
+            error_message = "Email already registered."
             return render_template("register.html", error_message=error_message)
 
         if password != confirm_password:
-            error_message = "Passwords do not match"
+            error_message = "Passwords do not match."
             return render_template("register.html", error_message=error_message)
 
         hashed_pw = generate_password_hash(password)
 
         users_col.insert_one({
-        "id_number": id_number,
-        "name": name,
-        "email": email,
-        "password_hash": hashed_pw,
-        "role": "user"   
-})
-
+            "id_number": id_number,   # stored as STRING (recommended)
+            "name": name,
+            "email": email,
+            "password_hash": hashed_pw,
+            "role": "user"
+        })
 
         success_message = "Registration successful!"
         return render_template("register.html", success_message=success_message)
 
     return render_template("register.html")
+
+@app.route("/forgot-password", methods=["GET", "POST"])
+def forgot_password():
+    message = None
+    error = None
+
+    if request.method == "POST":
+        email = request.form.get("email", "").strip()
+
+        user = users_col.find_one({"email": email})
+
+        if not user:
+            error = "No account found with that email."
+            return render_template("forgot_password.html", error=error)
+
+        reset_token = str(uuid4())
+
+        users_col.update_one(
+            {"_id": user["_id"]},
+            {"$set": {
+                "reset_token": reset_token,
+                "reset_expires": datetime.utcnow() + timedelta(minutes=15)
+            }}
+        )
+
+        send_reset_email(email, reset_token)
+        message = "A password reset link has been sent to your email."
+
+    return render_template("forgot_password.html", message=message, error=error)
+
+
+@app.route("/reset-password/<token>", methods=["GET"])
+def reset_password(token):
+    user = users_col.find_one({
+        "reset_token": token,
+        "reset_expires": { "$gt": datetime.utcnow() }
+    })
+
+    if not user:
+        return render_template(
+            "reset_password_invalid.html",
+            error="This reset link is invalid or has expired."
+        )
+
+    return render_template(
+        "reset_password.html",
+        token=token
+    )
+
+@app.route("/reset-password", methods=["POST"])
+def reset_password_submit():
+    token = request.form.get("token")
+    password = request.form.get("password")
+    confirm_password = request.form.get("confirm_password")
+
+    if not token:
+        return "Invalid request", 400
+
+    if password != confirm_password:
+        return render_template(
+            "reset_password_invalid.html",
+            error="Passwords do not match."
+        )
+
+    user = users_col.find_one({
+        "reset_token": token,
+        "reset_expires": { "$gt": datetime.utcnow() }
+    })
+
+    if not user:
+        return render_template(
+            "reset_password_invalid.html",
+            error="Reset link is invalid or expired."
+        )
+
+  
+    hashed_pw = generate_password_hash(password)
+
+    users_col.update_one(
+        {"_id": user["_id"]},
+        {"$set": {"password_hash": hashed_pw},
+         "$unset": {"reset_token": "", "reset_expires": ""}}
+    )
+
+    return render_template(
+        "login.html",
+        success_message="Password updated successfully. Please log in."
+    )
+
+
+def send_reset_email(to_email, token):
+    reset_link = f"{BASE_URL}/reset-password/{token}"
+
+    msg = EmailMessage()
+    msg["Subject"] = "Password Reset Request"
+    msg["From"] = EMAIL_ADDRESS
+    msg["To"] = to_email
+
+    msg.set_content(f"""
+You requested a password reset.
+
+Click the link below to reset your password:
+{reset_link}
+
+This link will expire in 15 minutes.
+
+If you did not request this, please ignore this email.
+""")
+
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+        server.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+        server.send_message(msg)
 
 
 @app.route("/admin")
@@ -133,7 +278,7 @@ def admin_dashboard():
     return render_template("admin.html")
 
 
-from datetime import datetime
+
 
 @app.route("/admin/api/reports")
 def admin_reports():
@@ -254,7 +399,8 @@ def lost_item():
 
         image = request.files.get("image")
         if image and image.filename:
-            filename = secure_filename(image.filename)
+            ext = os.path.splitext(image.filename)[1].lower()
+            filename = f"{uuid.uuid4().hex}{ext}"
             image.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
             doc["image_path"] = f"uploads/{filename}"
 
@@ -293,7 +439,8 @@ def found_item():
 
         image = request.files.get("image")
         if image and image.filename:
-            filename = secure_filename(image.filename)
+            ext = os.path.splitext(image.filename)[1].lower()
+            filename = f"{uuid.uuid4().hex}{ext}"
             image.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
             doc["image_path"] = f"uploads/{filename}"
 
@@ -352,9 +499,6 @@ def items():
         claimed_found=claimed_found
     )
 
-
-
-
 @app.route("/item/<string:item_type>/<string:item_id>")
 def item_description(item_type, item_id):
 
@@ -370,6 +514,7 @@ def item_description(item_type, item_id):
 
     user = users_col.find_one({"_id": item["user_id"]})
 
+    item["user_id_str"] = item["user_id"]
     item["_id"] = str(item["_id"])
     item["user_id"] = str(item["user_id"])
 
@@ -399,24 +544,46 @@ def edit_item(item_type, item_id):
         return "Unauthorized", 403
 
     if request.method == "POST":
+        update_data = {
+            "item_name": request.form["item_name"],
+            "description": request.form["description"],
+            "location": request.form["location"],
+            "category": request.form["category"]
+        }
+
+        # ✅ IMAGE REPLACEMENT
+        image = request.files.get("image")
+        if image and image.filename:
+            # delete old image if exists
+            old_path = item.get("image_path")
+            if old_path:
+                old_file = os.path.join(app.static_folder, old_path)
+                if os.path.exists(old_file):
+                    os.remove(old_file)
+
+            # save new image
+            ext = os.path.splitext(image.filename)[1].lower()
+            filename = f"{uuid.uuid4().hex}{ext}"
+            image.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+
+            update_data["image_path"] = f"uploads/{filename}"
+
         col.update_one(
             {"_id": ObjectId(item_id)},
-            {"$set": {
-                "item_name": request.form["item_name"],
-                "description": request.form["description"],
-                "location": request.form["location"],
-                "category": request.form["category"]
-            }}
+            {"$set": update_data}
         )
-        log_action(
-    action="EDIT_REPORT",
-    description=f"User {session['user_name']} edited {item_type} item {item_id}",
-    item_id=item_id,
-    item_type=item_type,
-    actor=f"user:{session['user_id']}"
-)
 
-        return redirect(url_for("item_description", item_type=item_type, item_id=item_id))
+        log_action(
+            action="EDIT_REPORT",
+            description=f"User {session['user_name']} edited {item_type} item {item_id}",
+            item_id=item_id,
+            item_type=item_type,
+            actor=f"user:{session['user_id']}"
+        )
+
+        return redirect(
+            url_for("item_description", item_type=item_type, item_id=item_id)
+        )
 
     return render_template("edit_item.html", item=item, item_type=item_type)
 

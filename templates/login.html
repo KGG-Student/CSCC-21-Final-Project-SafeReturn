@@ -15,7 +15,17 @@
             <form method="post" action="{{ url_for('login') }}">
                 <div class="input-group">
                     <label for="id-number">ID Number:</label>
-                    <input type="text" id="id-number" name="id_number" required>
+<input
+  type="text"
+  id="id-number"
+  name="id_number"
+  required
+  inputmode="numeric"
+  pattern="[0-9]*"
+  autocomplete="off"
+/>
+
+
                 </div>
 
                 <div class="input-group">
@@ -28,6 +38,10 @@
 
                     <button type="submit" class="log_btn">Sign In</button>
                 </div>
+                <div class="forgot-password">
+  <a href="{{ url_for('forgot_password') }}">Forgot Password?</a>
+</div>
+
             </form>
         </div>
     </div>
@@ -53,6 +67,17 @@
             }
         });
     </script>
-    
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+  const idInput = document.getElementById("id-number");
+
+  if (idInput) {
+    idInput.addEventListener("input", () => {
+      idInput.value = idInput.value.replace(/\D/g, "");
+    });
+  }
+});
+</script>
+
 </body>
 </html>

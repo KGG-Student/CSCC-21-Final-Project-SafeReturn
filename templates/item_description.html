@@ -24,10 +24,15 @@
     <div class="left-box">
       <div class="img-placeholder">
         {% if item.image_path %}
-          <img src="{{ url_for('static', filename=item.image_path) }}" alt="Item image">
-        {% else %}
-          <span>No image</span>
-        {% endif %}
+  <img
+    src="{{ url_for('static', filename=item.image_path) }}"
+    alt="Item image"
+    class="item-image"
+  >
+{% else %}
+  <p>No image uploaded</p>
+{% endif %}
+
       </div>
 
       <div class="display-box">Item Name: {{ item.item_name }}</div>
