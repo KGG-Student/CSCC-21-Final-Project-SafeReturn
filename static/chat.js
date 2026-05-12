@@ -1,106 +1,150 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const chatToggleButton = document.getElementById("chatToggleButton");
-  const chatSenderButton = document.getElementById("chatSenderButton");
-  const chatWindow       = document.getElementById("chatWindow");
-  const closeChatButton  = document.getElementById("closeChatButton");
-  const chatBody         = document.getElementById("chatBody");
-  const chatInput        = document.getElementById("chatInput");
-  const chatSendButton   = document.getElementById("chatSendButton");
-  const chatImageButton  = document.getElementById("chatImageButton");
-  const chatImageInput   = document.getElementById("chatImageInput");
+document.addEventListener("DOMContentLoaded", () => {
+  /* =========================
+     ELEMENTS
+  ========================= */
+  const body = document.getElementById("chatBody");
+  const input = document.getElementById("chatInput");
+  const sendBtn = document.getElementById("chatSendButton");
+  const imageBtn = document.getElementById("chatImageButton");
+  const imageInput = document.getElementById("chatImageInput");
 
-  const body     = document.body;
-  const itemType = body.dataset.itemType;
-  const itemId   = body.dataset.itemId;
+  const previewBox = document.getElementById("chatImagePreview");
+  const previewImg = document.getElementById("chatPreviewImg");
+  const removePreviewBtn = document.getElementById("removePreview");
 
-  function openChat() {
-    chatWindow.style.display = "block";
-    loadChat();
-    markChatRead();
+  if (!body || !input || !sendBtn) {
+    console.warn("❌ Chat elements missing");
+    return;
   }
 
-  function closeChat() {
-    chatWindow.style.display = "none";
+  const ITEM_ID = body.dataset.itemId;
+  const ITEM_TYPE = body.dataset.itemType;
+
+  if (!ITEM_ID || !ITEM_TYPE) {
+    console.warn("❌ Missing item data attributes");
+    return;
   }
 
-  chatToggleButton?.addEventListener("click", () => {
-    chatWindow.style.display === "block" ? closeChat() : openChat();
+  /* =========================
+     IMAGE PICKER
+  ========================= */
+  if (imageBtn && imageInput) {
+    imageBtn.addEventListener("click", () => imageInput.click());
+  }
+
+  imageInput.addEventListener("change", () => {
+    const file = imageInput.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = e => {
+      previewImg.src = e.target.result;
+      previewBox.style.display = "flex";
+    };
+    reader.readAsDataURL(file);
   });
 
-  chatSenderButton?.addEventListener("click", openChat);
-  closeChatButton?.addEventListener("click", closeChat);
+  removePreviewBtn?.addEventListener("click", () => {
+    imageInput.value = "";
+    previewImg.src = "";
+    previewBox.style.display = "none";
+  });
 
-  chatImageButton?.addEventListener("click", () => chatImageInput.click());
+  /* =========================
+     SEND MESSAGE
+  ========================= */
+  sendBtn.addEventListener("click", sendMessage);
 
-  chatSendButton?.addEventListener("click", sendMessage);
-  chatInput?.addEventListener("keydown", e => {
+  input.addEventListener("keydown", e => {
     if (e.key === "Enter") {
       e.preventDefault();
       sendMessage();
     }
   });
 
-  function loadChat() {
-    fetch(`/api/chat/messages/${itemType}/${itemId}`)
-      .then(res => res.json())
-      .then(data => {
-        chatBody.innerHTML = "";
-
-        data.messages.forEach(msg => {
-          const div = document.createElement("div");
-          div.className = "chat-message " + (msg.from_me ? "from-me" : "from-them");
-
-          div.innerHTML = `
-            <div class="chat-meta">
-              ${msg.sender_name} (${msg.sender_id_number}) • ${msg.created_at}
-              ${msg.from_me ? `<button class="chat-delete" data-id="${msg.id}">✖</button>` : ""}
-            </div>
-            ${msg.text ? `<div class="chat-text">${msg.text}</div>` : ""}
-            ${msg.image_url ? `<img class="chat-image" src="${msg.image_url}">` : ""}
-          `;
-
-          chatBody.appendChild(div);
-        });
-
-        chatBody.scrollTop = chatBody.scrollHeight;
-
-        // attach delete handlers
-        document.querySelectorAll(".chat-delete").forEach(btn => {
-          btn.addEventListener("click", () => deleteMessage(btn.dataset.id));
-        });
-      });
-  }
-
   function sendMessage() {
-    const text = chatInput.value.trim();
-    const file = chatImageInput.files[0];
+    const text = input.value.trim();
+    const file = imageInput.files[0];
+
     if (!text && !file) return;
 
     const formData = new FormData();
-    formData.append("item_type", itemType);
-    formData.append("item_id", itemId);
+    formData.append("item_id", ITEM_ID);
+    formData.append("item_type", ITEM_TYPE);
     formData.append("message", text);
     if (file) formData.append("image", file);
 
-    fetch("/api/chat/send", { method: "POST", body: formData })
+    fetch("/api/chat/send", {
+      method: "POST",
+      body: formData
+    })
+      .then(res => res.json())
+      .then(() => {
+        input.value = "";
+        imageInput.value = "";
+        previewImg.src = "";
+        previewBox.style.display = "none";
+        loadMessages();
+      })
+      .catch(err => console.error("Send failed", err));
+  }
+
+  /* =========================
+     LOAD MESSAGES
+  ========================= */
+  function loadMessages() {
+    fetch(`/api/chat/messages/${ITEM_TYPE}/${ITEM_ID}`)
       .then(res => res.json())
       .then(data => {
-        if (data.status === "ok") {
-          chatInput.value = "";
-          chatImageInput.value = "";
-          loadChat();
-        }
-      });
+        body.innerHTML = "";
+
+        data.messages.forEach(m => {
+          const div = document.createElement("div");
+          div.className = "chat-msg";
+
+          div.innerHTML = `
+  <strong>${m.sender_name || "Unknown"}</strong>
+  <small>${m.created_at}</small>
+
+  ${m.message ? `<p>${m.message}</p>` : ""}
+
+  ${
+    m.image_url
+      ? `<img src="${m.image_url}" class="chat-image">`
+      : ""
   }
 
-  function deleteMessage(messageId) {
-    if (!confirm("Delete this message?")) return;
+  ${
+    m.can_delete
+      ? `<button class="delete-msg" data-id="${m.id}">×</button>`
+      : ""
+  }
+`;
 
-    fetch(`/api/chat/delete/${messageId}`, { method: "POST" })
-      .then(() => loadChat());
+
+          body.appendChild(div);
+        });
+
+        body.scrollTop = body.scrollHeight;
+      })
+      .catch(err => console.error("Load messages failed", err));
   }
 
-  function markChatRead() {
-    fetch(`/api/chat/mark_read/${itemType}/${itemId}`, { method: "POST" });
-  }
+  /* =========================
+     DELETE MESSAGE
+  ========================= */
+  body.addEventListener("click", e => {
+    if (!e.target.classList.contains("delete-msg")) return;
+
+    fetch(`/api/chat/delete/${e.target.dataset.id}`, {
+      method: "POST"
+    })
+      .then(() => loadMessages())
+      .catch(err => console.error("Delete failed", err));
+  });
+
+  /* =========================
+     INIT
+  ========================= */
+  loadMessages();
 });

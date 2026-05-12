@@ -807,41 +807,28 @@ def admin_chat_list():
         return jsonify({"error": "Forbidden"}), 403
 
     pipeline = [
+        {"$sort": {"created_at": 1}},
         {
             "$group": {
                 "_id": {
                     "item_id": "$item_id",
                     "item_type": "$item_type"
                 },
-                "last_message": { "$last": "$message" },
-                "last_time": { "$last": "$created_at" }
+                "last_message": {"$last": "$message"},
+                "last_time": {"$last": "$created_at"}
             }
         },
-        { "$sort": { "last_time": -1 } }
+        {"$sort": {"last_time": -1}}
     ]
 
     chats = list(chat_col.aggregate(pipeline))
 
+    # stringify ObjectIds
+    for c in chats:
+        c["_id"]["item_id"] = str(c["_id"]["item_id"])
+        c["last_time"] = c["last_time"].strftime("%Y-%m-%d %H:%M")
+
     return jsonify(chats)
-
-@app.route("/admin/api/chat/messages/<item_type>/<item_id>")
-def admin_chat_messages(item_type, item_id):
-    if not admin_required():
-        return jsonify({"error": "Forbidden"}), 403
-
-    msgs = list(chat_col.find(
-        {
-            "item_type": item_type,
-            "item_id": ObjectId(item_id)
-        }
-    ).sort("created_at", 1))
-
-    for m in msgs:
-        m["_id"] = str(m["_id"])
-        m["sender_id"] = str(m["sender_id"])
-        m["item_id"] = str(m["item_id"])
-
-    return jsonify(msgs)
 
 
 @app.route("/admin/api/chat/send", methods=["POST"])
@@ -851,20 +838,58 @@ def admin_send_chat():
 
     data = request.json
 
-    mongo_db.item_chat_messages.insert_one({
+    sender_role = "admin" if session.get("role") == "admin" else "user"
+    sender_id = None if sender_role == "admin" else ObjectId(session["user_id"])
+
+
+    chat_col.insert_one({
         "item_id": ObjectId(data["item_id"]),
         "item_type": data["item_type"],
-        "sender": "admin",
         "sender_id": None,
-        "receiver_id": ObjectId(data["user_id"]),
+        "sender_role": "admin",
         "message": data["message"],
-        "created_at": datetime.utcnow()
+        "created_at": datetime.utcnow(),
+        "read_by": []
     })
 
     return jsonify({"status": "ok"})
 
+@app.route("/api/chat/send", methods=["POST"])
+def chat_send():
+    if "user_id" not in session:
+        return jsonify({"error": "Unauthorized"}), 401
 
-@app.route("/api/chat/messages/<string:item_type>/<string:item_id>")
+    item_id = request.form.get("item_id")
+    item_type = request.form.get("item_type")
+    message = request.form.get("message", "").strip()
+    image = request.files.get("image")
+
+    image_path = None
+    if image and image.filename:
+        ext = os.path.splitext(image.filename)[1].lower()
+        filename = f"{uuid.uuid4().hex}{ext}"
+        image.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+        image_path = f"uploads/{filename}"
+
+    chat_col.insert_one({
+        "item_id": ObjectId(item_id),
+        "item_type": item_type,
+        "sender_id": ObjectId(session["user_id"]),
+        "sender_role": session.get("role", "user"),
+        "message": message,
+        "image_path": image_path,
+        "created_at": datetime.utcnow(),
+        "read_by": []
+    })
+
+    notify_item_owner(item_type, item_id)
+
+
+    return jsonify({"success": True})
+
+
+
+@app.route("/api/chat/messages/<item_type>/<item_id>")
 def load_chat(item_type, item_id):
     if "user_id" not in session:
         return jsonify({"error": "Unauthorized"}), 401
@@ -879,67 +904,14 @@ def load_chat(item_type, item_id):
         user = users_col.find_one({"_id": m["sender_id"]})
         result.append({
             "id": str(m["_id"]),
-            "text": m.get("message"),
+            "message": m.get("message", ""),
             "image_url": url_for("static", filename=m["image_path"]) if m.get("image_path") else None,
-            "from_me": str(m["sender_id"]) == session["user_id"],
-            "sender_name": user["name"],
-            "sender_id_number": user["id_number"],
-            "created_at": m["created_at"].strftime("%Y-%m-%d %H:%M")
+            "sender_name": user["name"] if user else "Admin",
+            "created_at": m["created_at"].strftime("%Y-%m-%d %H:%M"),
+            "can_delete": str(m["sender_id"]) == session["user_id"]
         })
 
     return jsonify({"messages": result})
-
-
-@app.route("/api/chat/send", methods=["POST"])
-def send_chat():
-    if "user_id" not in session:
-        return jsonify({"error": "Unauthorized"}), 401
-
-    item_type = request.form.get("item_type")
-    item_id   = request.form.get("item_id")
-    message   = request.form.get("message", "").strip()
-
-    if item_type not in ("lost", "found"):
-        return jsonify({"error": "Invalid item type"}), 400
-
-    if not item_id:
-        return jsonify({"error": "Missing item_id"}), 400
-
-    if not message:
-        return jsonify({"error": "Empty message"}), 400
-
-    chat_doc = {
-        "item_type": item_type,
-        "item_id": ObjectId(item_id),
-        "sender_id": ObjectId(session["user_id"]),
-        "message": message,
-        "created_at": datetime.utcnow()
-    }
-
-    mongo_db.item_chat_messages.insert_one(chat_doc)
-
-    notify_item_owner(item_type, item_id)
-
-    return jsonify({"status": "ok"})
-
-@app.route("/api/chat/send", methods=["POST"])
-def send_chat_message():
-    if "user_id" not in session:
-        return jsonify({"error": "Unauthorized"}), 401
-
-    data = request.json
-
-    chat_col.insert_one({
-        "item_type": data["item_type"],
-        "item_id": ObjectId(data["item_id"]),
-        "sender_id": ObjectId(session["user_id"]),
-        "sender_role": session.get("role", "user"),  # ✅ FIX
-        "message": data["message"],
-        "created_at": datetime.utcnow(),
-        "read_by": []
-    })
-
-    return jsonify({"success": True})
 
 
 def notify_item_owner(item_type, item_id):

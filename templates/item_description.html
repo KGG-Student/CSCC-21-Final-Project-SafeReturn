@@ -168,7 +168,7 @@
       <img src="{{ url_for('static', filename='images/Back.jpg') }}" class="lost-icon">
     </a>
   {% else %}
-    <a href="{{ url_for('homepage') }}" class="crl_btn">
+    <a href="{{ url_for('items') }}" class="crl_btn">
       <img src="{{ url_for('static', filename='images/Back.jpg') }}" class="lost-icon">
     </a>
   {% endif %}
@@ -190,8 +190,10 @@
 <script src="{{ url_for('static', filename='chat.js') }}"></script>
 <script src="{{ url_for('static', filename='notification.js') }}"></script>
 
-<script>
+<<script>
 document.addEventListener("DOMContentLoaded", () => {
+
+  /* ===== EXISTING CODE (keep yours) ===== */
 
   const deleteBtn = document.getElementById("delete-button");
   const deleteForm = document.getElementById("delete-form");
@@ -214,20 +216,38 @@ document.addEventListener("DOMContentLoaded", () => {
     claimCancel.onclick = () => claimModal.classList.remove("show");
   }
 
-  const chatSenderBtn = document.getElementById("chatSenderButton");
+  /* ===== 🔥 ADD ONLY THIS PART 🔥 ===== */
+
   const chatToggleBtn = document.getElementById("chatToggleButton");
   const chatWindow = document.getElementById("chatWindow");
+  const closeChatBtn = document.getElementById("closeChatButton");
+  const chatSenderBtn = document.getElementById("chatSenderButton");
 
-  if (chatSenderBtn && chatToggleBtn && chatWindow) {
-    chatSenderBtn.onclick = () => {
-      if (chatWindow.style.display !== "block") {
-        chatToggleBtn.click();
-      }
-    };
+  // Toggle chat (floating button)
+  if (chatToggleBtn && chatWindow) {
+    chatToggleBtn.addEventListener("click", () => {
+      chatWindow.style.display =
+        chatWindow.style.display === "block" ? "none" : "block";
+    });
+  }
+
+  // Close chat (X button)
+  if (closeChatBtn && chatWindow) {
+    closeChatBtn.addEventListener("click", () => {
+      chatWindow.style.display = "none";
+    });
+  }
+
+  // Chat with sender
+  if (chatSenderBtn && chatWindow) {
+    chatSenderBtn.addEventListener("click", () => {
+      chatWindow.style.display = "block";
+    });
   }
 
 });
 </script>
+
 
 </body>
 </html>

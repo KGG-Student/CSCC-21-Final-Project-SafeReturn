@@ -1,6 +1,7 @@
 <!-- templates/components/chat_window.html -->
 
 <div class="chat-window" id="chatWindow" style="display:none;">
+  <!-- HEADER -->
   <div class="chat-header">
     <div class="user-info">
       <span class="user-status online"></span>
@@ -9,16 +10,38 @@
     <button class="close-chat" id="closeChatButton">&times;</button>
   </div>
 
-  <!-- where messages are rendered by chat.js -->
-  <div class="chat-body" id="chatBody"></div>
+  <!-- CHAT BODY -->
+  <!-- IMPORTANT: data-item-id and data-item-type are REQUIRED -->
+  <div
+    class="chat-body"
+    id="chatBody"
+    data-item-id="{{ item._id if item is defined else '' }}"
+    data-item-type="{{ item_type if item_type is defined else '' }}"
+  ></div>
 
-  <!-- footer with image + text + send -->
+  <!-- IMAGE PREVIEW -->
+<div id="chatImagePreview" class="chat-image-preview" style="display:none;">
+  <img id="chatPreviewImg" src="" alt="Preview">
+  <button type="button" id="removePreview">×</button>
+</div>
+
+  <!-- FOOTER -->
   <div class="chat-footer">
-    <!-- hidden file input -->
-    <input type="file" id="chatImageInput" accept="image/*" style="display:none;">
+    <!-- hidden image input -->
+    <input
+      type="file"
+      id="chatImageInput"
+      accept="image/*"
+      style="display:none;"
+    >
 
-    <!-- image button -->
-    <button type="button" id="chatImageButton" class="chat-image-button">
+    <!-- image upload button -->
+    <button
+      type="button"
+      id="chatImageButton"
+      class="chat-image-button"
+      title="Send image"
+    >
       📷
     </button>
 
@@ -28,10 +51,15 @@
       id="chatInput"
       class="chat-input"
       placeholder="Type a message..."
+      autocomplete="off"
     >
 
     <!-- send button -->
-    <button type="button" id="chatSendButton" class="chat-send-button">
+    <button
+      type="button"
+      id="chatSendButton"
+      class="chat-send-button"
+    >
       Send
     </button>
   </div>
