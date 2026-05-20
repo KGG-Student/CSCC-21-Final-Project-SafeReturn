@@ -19,7 +19,10 @@ from email.message import EmailMessage
 from werkzeug.utils import secure_filename
 
 
-ATLAS_URI = "mongodb+srv://flaskUser:Flask12345@cluster0.uxyqdpe.mongodb.net/?appName=Cluster0"
+ATLAS_URI = os.environ.get(
+    "ATLAS_URI",
+    "mongodb+srv://flaskUser:Flask12345@cluster0.uxyqdpe.mongodb.net/?appName=Cluster0"
+)
 
 client = MongoClient(ATLAS_URI, tlsCAFile=certifi.where())
 mongo_db = client["lost_and_found"]
@@ -62,11 +65,11 @@ def log_action(action, description, item_id=None, item_type=None, actor="admin")
 
 
 app = Flask(__name__)
-app.secret_key = "CHANGE_THIS_SECRET_KEY"
+app.secret_key = os.environ.get("SECRET_KEY", "CHANGE_THIS_SECRET_KEY")
 
-EMAIL_ADDRESS = "skyb18627@gmail.com"
-EMAIL_PASSWORD = "lgghmexr cnuljloh"
-BASE_URL = "http://127.0.0.1:5000"
+EMAIL_ADDRESS = os.environ.get("EMAIL_ADDRESS", "skyb18627@gmail.com")
+EMAIL_PASSWORD = os.environ.get("EMAIL_PASSWORD", "lgghmexr cnuljloh")
+BASE_URL = os.environ.get("BASE_URL", "http://127.0.0.1:5000")
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
